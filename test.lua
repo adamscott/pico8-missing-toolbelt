@@ -1,54 +1,5 @@
 missing = require('package_missing')
 
-describe("missing -setmetatable-", function()
-  it("should set a metatable", function()
-    local Test_missing = {}
-    Test_missing.__index = Test_missing
-    function Test_missing:_init (name)
-      self.name = name
-    end
-    local Test_native = {}
-    Test_native.__index = Test_missing
-    function Test_native:_init (name)
-      self.name = name
-    end
-    local mt = {
-      __call = function (cls, ...)
-        local self = setmetatable({}, cls)
-        self:_init(...)
-        return self
-      end
-    }
-
-    setmetatable(Test_native, mt)
-    missing.setmetatable(Test_missing, mt)
-    assert.are.equals(
-      getmetatable(Test_native),
-      getmetatable(Test_missing)
-    )
-    assert.truthy(Test_native("native"))
-    assert.truthy(Test_missing("missing"))
-  end)
-end)
-
-describe("missing -getmetatable-", function()
-  it("should get a metatable", function()
-    local Test = {}
-    Test.__index = Test
-    local mt = {
-      __call = function (cls, ...)
-        local self = setmetatable({}, cls)
-        return self
-      end
-    }
-    missing.setmetatable(Test, mt)
-    assert.are.equals(
-      getmetatable(Test),
-      missing.getmetatable(Test)
-    )
-  end)
-end)
-
 describe("missing -rawget-", function()
   it("should get raw value", function ()
     local setValue = 125
