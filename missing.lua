@@ -1,17 +1,5 @@
 -- pico8-missing-builtins v0.2.0
 -- https://github.com/adamscott/pico8-missing-builtins
-__setmetatable = setmetatable
-__metatables = {}
-function setmetatable (object, mt)
-  __metatables[object] = mt
-  return __setmetatable(object, mt)
-end
--- getmetatable depends on this setmetatable implementation
-function getmetatable (object)
-  return __metatables[object]
-end
-
--- rawget depends on getmetatable
 function rawget (tbl, index)
   assert(type(tbl) == 'table', "bad argument #1 to 'rawget' "
     .."(table expected, got "..type(tbl)..")")
